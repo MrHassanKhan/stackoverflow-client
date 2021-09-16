@@ -1,0 +1,42 @@
+<div class="row pt-5">
+  <div class="d-flex justify-content-center" *ngIf="loader">
+    <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <ng-template [ngIf]="questionResponse">
+    <div class="col-lg-9">
+      <div class="d-flex flex-column">
+        <h2>{{questionResponse.title}}</h2>
+        <div class="d-flex justify-content-between col-md-5">
+          <div>Asked : {{questionResponse.creation_date| date:'dd/MM/yyyy'}}</div>
+          <div>Active: {{questionResponse.is_answered}}</div>
+          <div>Viewed: {{questionResponse.view_count}}</div>
+        </div>
+      </div>
+  
+    </div>
+    <div class="col-lg-3">
+      <h5>Related</h5>
+
+      <div class="d-flex flex-column">
+        <div *ngFor="let rquest of relatedQuestionResponse" class="d-flex flex-row">
+          <div>
+            <span class="badge bg-success p-2 me-2 mt-1">
+              {{rquest.answer_count}}
+            </span>
+            
+          </div>
+          <div>
+            <a style="text-decoration: none;" [routerLink]="['../' + rquest.question_id]" routerLinkActive="active" >
+              {{rquest.title}}
+            </a>
+            </div>
+        </div>
+      </div>
+  
+    </div>
+    
+  </ng-template>
+  
+</div>
