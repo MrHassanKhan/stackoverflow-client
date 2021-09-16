@@ -1,21 +1,36 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Item, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
+import { AnswerItem, Item, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
 import { QuestionService } from 'src/app/services/question/question.service';
 
 @Component({
   selector: 'app-question-detail',
   templateUrl: './question-detail.component.html',
-  styleUrls: ['./question-detail.component.scss']
+  styleUrls: ['./question-detail.component.scss'],
+  animations: [
+    trigger('translate', [
+      state("void", style({opacity: 0, transform: 'translateX(-60px)'})),
+      transition("void => *, * => void", [
+        animate(700)
+      ])
+    ]),
+    trigger('translateup', [
+      state("void", style({opacity: 0, transform: 'translateY(60px)'})),
+      transition("void => *, * => void", [
+        animate(700)
+      ])
+    ])
+  ]
 })
 export class QuestionDetailComponent implements OnInit {
   questionId: number | null = null;
   loader = true;
   questionResponse: Item|null = null;
   relatedQuestionResponse: Item[] | null = null;
-  answerResponse: Item[] | null = null;
+  answerResponse: AnswerItem[] | null = null;
   constructor( private route: ActivatedRoute, private questionService: QuestionService,
     private router: Router ) { }
 
@@ -27,7 +42,7 @@ export class QuestionDetailComponent implements OnInit {
         return forkJoin([
           this.questionService.getById(this.questionId), 
           this.questionService.getRelatedQuestionsById(this.questionId),
-          this.questionService.getCommentsByQuestionId(this.questionId)
+          this.questionService.getAnswersByQuestionId(this.questionId)
         ]);
       })
     ).subscribe(res => {

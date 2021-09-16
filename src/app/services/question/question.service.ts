@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { QuestionPageFilter, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
+import { AnswerResponse, QuestionPageFilter, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
 import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { SwUpdate } from '@angular/service-worker';
 
 @Injectable()
 export class QuestionService {
     
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, updates: SwUpdate) {
+      updates.available.subscribe(event => {
+        if (confirm("Are you Sure you want to update? Current Version: " + event.current + 
+        "Available Version : " + event.available)) {
+          updates.activateUpdate().then(() => document.location.reload());
+        }
+      });
+     }
 
 
     filterQuestions(data:QuestionPageFilter): Observable<QuestionResponse> {
@@ -28,6 +36,11 @@ export class QuestionService {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}/comments?`
       return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow').pipe(catchError(this.handleError));
+    }
+    getAnswersByQuestionId(questionId:any): Observable<AnswerResponse> {
+      let baseUrl = environment.baseURL + 'questions';
+      baseUrl += `/${questionId}/answers?`
+      return this.httpClient.get<AnswerResponse>(baseUrl + 'site=stackoverflow').pipe(catchError(this.handleError));
     }
 
     getRelatedQuestionsById(questionId:any): Observable<QuestionResponse> {

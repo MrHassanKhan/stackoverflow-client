@@ -5,7 +5,7 @@
     </div>
   </div>
   <ng-template [ngIf]="questionResponse">
-    <div class="col-lg-9">
+    <div class="col-lg-9" @translate>
       <div class="d-flex flex-column">
         <h2>{{questionResponse.title}}</h2>
         <div class="d-flex justify-content-between col-md-5">
@@ -14,12 +14,34 @@
           <div>Viewed: {{questionResponse.view_count}}</div>
         </div>
       </div>
-  
+
+      <h4 class="text-muted">List of Answers</h4>
+      <ng-template [ngIf]="answerResponse">
+
+        <ng-container *ngFor="let answer of answerResponse">
+          <div class="d-flex flex-column">
+            <div class="d-flex">
+              <img [src]="answer.owner.profile_image" width="40px" class="rounded-circle" />
+              <h4 class="p-2">{{answer.owner.display_name}}</h4>
+            </div>
+            
+            <!-- <h2>{{answer.}}</h2> -->
+            <div class="d-flex justify-content-between col-md-5">
+              <div>Answer Id : {{answer.answer_id}}</div>
+              <div>Score: {{answer.score}}</div>
+              <div>Is Accepted: {{answer.is_accepted}}</div>
+            </div>
+          </div>
+
+        </ng-container> 
+
+      </ng-template>
+    
     </div>
     <div class="col-lg-3">
       <h5>Related</h5>
 
-      <div class="d-flex flex-column">
+      <div class="d-flex flex-column" @translateup>
         <div *ngFor="let rquest of relatedQuestionResponse" class="d-flex flex-row">
           <div>
             <span class="badge bg-success p-2 me-2 mt-1">

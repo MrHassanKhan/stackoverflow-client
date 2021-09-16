@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { QuestionPageFilter, QuestionResponse } from '../dtos/question/question-filter.dto';
 import { QuestionService } from '../services/question/question.service';
@@ -9,9 +9,9 @@ import { QuestionService } from '../services/question/question.service';
   styleUrls: ['./question.component.scss'],
   animations: [
     trigger('fade', [
-      transition("void => *", [
-        style({opacity: 0}),
-        animate(1000, style({opacity: 1}))
+      state("void", style({opacity: 0, transform: 'translateY(50px)'})),
+      transition("void => *, * => void", [
+        animate(700)
       ])
     ])
   ]
