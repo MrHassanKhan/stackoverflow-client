@@ -1,6 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { QuestionPageFilter, QuestionResponse } from '../dtos/question/question-filter.dto';
+import { MainService } from '../services/main/main.service';
 import { QuestionService } from '../services/question/question.service';
 
 @Component({
@@ -16,7 +18,7 @@ import { QuestionService } from '../services/question/question.service';
     ])
   ]
 })
-export class QuestionListComponent implements OnInit {
+export class QuestionListComponent implements OnInit, OnDestroy {
 
   loader = true;
 
@@ -28,11 +30,46 @@ export class QuestionListComponent implements OnInit {
   errorMessage: any;
   sliceButtons: any = [];
 
-  constructor(private questionService: QuestionService) { }
+  sub: Subscription | undefined;
+
+  constructor(private questionService: QuestionService, private mainService: MainService) { }
 
   ngOnInit() {
 
+    // For Header Main Search Handler 
+    this.sub = this.mainService.getSearch().subscribe(search => {
+      if(search) {
+        this.loader= true;
+        this.pageFilter.intitle = search;
+        this.pageFilter.page = 1;
+        this.questionService.searchQuestions(this.pageFilter).subscribe(res => {
+          this.questionResponse = res;
+          // for Creating Pagination Buttons 
+          const maxButton = Number(this.questionResponse.quota_max/this.pageFilter.pageSize);
+          this.buttonsForPagination = [];
+          for (let index = 1; index <= maxButton; index++) {
+            this.buttonsForPagination.push(index);
+          }
+          this.sliceButtons = this.buttonsForPagination.slice(this.pageFilter.page-1, ((this.pageFilter.page + 4) > this.buttonsForPagination.length ? this.buttonsForPagination.length : (this.pageFilter.page + 4)));
+          this.loader = false;
+        }, err => {
+          this.errorMessage = err;
+    
+          setTimeout(() => {
+            this.errorMessage = null;
+          }, 5000);
+          this.loader = false;
+        })
+      } else {
+        this.pageFilter.intitle = null;
+      }
+    });
+
     this.filter();
+  }
+
+  ngOnDestroy() {
+    this.sub?.unsubscribe();
   }
 
 

@@ -27,6 +27,15 @@ export class QuestionService {
       return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow').pipe(catchError(this.handleError));
     }
 
+    searchQuestions(data:QuestionPageFilter): Observable<QuestionResponse> {
+      // /2.3/questions?page=1&pagesize=20&order=asc&sort=hot&site=stackoverflow
+      let baseUrl = environment.baseURL + 'questions';
+      baseUrl += `?page=${data.page}&pageSize=${data.pageSize}`;
+      baseUrl += `&sort=${data.sort}&order=${data.order}&intitle=${data.intitle}`;
+      
+      return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow').pipe(catchError(this.handleError));
+    }
+
     getById(questionId:any): Observable<QuestionResponse> {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}?`

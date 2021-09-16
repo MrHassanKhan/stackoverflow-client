@@ -4,6 +4,7 @@ export class QuestionPageFilter {
     sort :string | null = 'hot';
     order :string| null = 'asc';
     tagged :string| null = null;
+    intitle :string| null = null;
 }
 
 
