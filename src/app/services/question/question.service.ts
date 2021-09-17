@@ -11,11 +11,10 @@ export class QuestionService {
     
     constructor(private httpClient: HttpClient, updates: SwUpdate) {
       updates.available.subscribe(event => {
-        if (confirm("Are you Sure you want to update? Current Version: " + event.current + 
-        "Available Version : " + event.available)) {
+        if (confirm("Are you Sure you want to update? Current Version: " + event.current.hash + 
+        "Available Version : " + event.available.hash)) {
           updates.activateUpdate().then(() => document.location.reload());
         }
-        console.log('Updates: ', event);
       });
      }
 
