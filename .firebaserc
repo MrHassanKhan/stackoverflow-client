@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "stackoverflow-client-1": {
+      "hosting": {
+        "stackoverflow-client": [
+          "stackoverflow-client-1"
+        ]
+      }
+    }
+  }
+}
