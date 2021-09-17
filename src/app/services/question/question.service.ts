@@ -15,6 +15,7 @@ export class QuestionService {
         "Available Version : " + event.available)) {
           updates.activateUpdate().then(() => document.location.reload());
         }
+        console.log('Updates: ', event);
       });
      }
 
