@@ -29,9 +29,9 @@ export class QuestionService {
 
     searchQuestions(data:QuestionPageFilter): Observable<QuestionResponse> {
       // /2.3/questions?page=1&pagesize=20&order=asc&sort=hot&site=stackoverflow
-      let baseUrl = environment.baseURL + 'questions';
+      let baseUrl = environment.baseURL + 'search';
       baseUrl += `?page=${data.page}&pageSize=${data.pageSize}`;
-      baseUrl += `&sort=${data.sort}&order=${data.order}&intitle=${data.intitle}`;
+      baseUrl += `&intitle=${data.intitle}`;
       
       return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow').pipe(catchError(this.handleError));
     }
