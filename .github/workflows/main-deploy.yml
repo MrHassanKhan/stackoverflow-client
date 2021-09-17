@@ -30,7 +30,7 @@ jobs:
     - name: Archive Build
       uses: w9jds/firebase-action@master
       with:
-        args: deploy --only hosting:stackoverflow-client
+        args: deploy --project stackoverflow-client-1 --only hosting
       env: 
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         
