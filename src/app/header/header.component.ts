@@ -25,7 +25,11 @@ export class HeaderComponent implements OnInit {
   onSearchChanged(event: any) {
     // this.mainService.searchEvent.next(this.searchText);
 
-    this.router.navigate(['questions'], {queryParams: {searchText: this.searchText}});
+    if(this.searchText) {
+      this.router.navigate(['questions'], {queryParams: {searchText: this.searchText}});
+    } else {
+      this.router.navigate(['questions']);
+    }
 
   }
 
