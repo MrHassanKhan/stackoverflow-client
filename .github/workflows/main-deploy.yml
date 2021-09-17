@@ -23,9 +23,9 @@ jobs:
       uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Packaged Installation
+        
     - run: npm install
-    - name: Application Build In Production
+    # - name: yarn install, build and test
     - run: npm run build:prod
     - name: Archive Build
       uses: w9jds/firebase-action@master
