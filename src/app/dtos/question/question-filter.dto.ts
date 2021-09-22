@@ -1,7 +1,7 @@
 export class QuestionPageFilter {
     page: number = 1;
     pageSize: number = 10;
-    sort :string | null = 'hot';
+    sort :string | null = 'activity';
     order :string| null = 'asc';
     tagged :string| null = null;
     intitle :string| null = null;
@@ -19,6 +19,7 @@ export interface AnswerItem {
   owner: Owner
   is_accepted: boolean
   score: number
+  body: any;
   last_activity_date: number
   creation_date: number
   answer_id: number
@@ -51,6 +52,7 @@ export interface QuestionResponse {
     owner: Owner
     is_answered: boolean
     view_count: number
+    body: any
     answer_count: number
     score: number
     last_activity_date: number

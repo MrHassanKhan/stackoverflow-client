@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, query, stagger, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,12 +11,44 @@ import { QuestionService } from '../services/question/question.service';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss'],
   animations: [
-    trigger('fade', [
-      state("void", style({opacity: 0, transform: 'translateY(50px)'})),
-      transition("void => *, * => void", [
-        animate(700)
+    // trigger('fade', [
+      // state("void", style({opacity: 0, transform: 'translateY(50px)'})),
+    //   transition("void => *, * => void", [
+    //     animate(700),
+    //     stagger(-30, [
+    //       animate('500ms cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 1, transform: 'none' }))
+    //     ])
+    //   ])
+    // ]),
+    trigger('pageAnimations', [
+      transition(':enter', [
+        query('#votes, #question', [
+          style({opacity: 0, transform: 'translateX(-100px)'}),
+          stagger(30, [
+            animate('500ms cubic-bezier(0.35, 0, 0.25, 1)', style({ opacity: 1, transform: 'none' }))
+          ])
+        ], { optional: true })
+
       ])
-    ])
+    ]),
+    // trigger('filterAnimation', [
+    //   transition(':enter, * => 0, * => -1', []),
+    //   transition(':increment', [
+    //     query(':enter', [
+    //       style({ opacity: 0, width: '0px' }),
+    //       stagger(50, [
+    //         animate('300ms ease-out', style({ opacity: 1, width: '*' })),
+    //       ]),
+    //     ], { optional: true })
+    //   ]),
+    //   transition(':decrement', [
+    //     query(':leave', [
+    //       stagger(50, [
+    //         animate('300ms ease-out', style({ opacity: 0, width: '0px' })),
+    //       ]),
+    //     ])
+    //   ]),
+    // ]),
   ]
 })
 export class QuestionListComponent implements OnInit, OnDestroy {
@@ -30,6 +62,33 @@ export class QuestionListComponent implements OnInit, OnDestroy {
   buttonsForPagination: any = [];
   errorMessage: any;
   sliceButtons: any = [];
+
+  questionTypes = [
+    {
+      title: 'Activity',
+      key: 'activity'
+    },
+    {
+      title: 'Hot',
+      key: 'hot'
+    },
+    {
+      title: 'Week',
+      key: 'week'
+    },
+    {
+      title: 'Month',
+      key: 'month'
+    },
+    {
+      title: 'Creation',
+      key: 'creation'
+    },
+    {
+      title: 'Votes',
+      key: 'votes'
+    }
+  ]
 
   sub: Subscription | undefined;
 

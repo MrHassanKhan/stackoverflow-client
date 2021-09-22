@@ -3,11 +3,41 @@
 
 *{
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-font-kerning: auto;
-font-size: 14px;
-font-stretch: normal;
-font-style: normal;
-font-variant: normal;
-font-variant-ligatures: normal;
-font-weight: normal;
+    font-kerning: auto;
+    font-size: 14px;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-variant-ligatures: normal;
+    font-weight: normal;
+}
+
+
+.nav {
+    &.nav-pills {
+        .nav-item {
+
+            .nav-link.active {
+                font-weight: 600;
+                color: #212529;
+                background-color: #f8f9fa;
+            }
+
+            .nav-link {
+                color: #212529;
+            }
+
+        }
+        .nav-item > .active {
+            border-right: 3px solid #f59d58;
+        }
+        
+    }
+}
+
+
+pre {
+    background-color: #f8f9fa;
+    padding: 20px 20px;
+    border-radius: 5px;
 }

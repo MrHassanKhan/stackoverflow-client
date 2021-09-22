@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { AnswerItem, Item, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
+import { AnswerItem, Item, QuestionPageFilter, QuestionResponse } from 'src/app/dtos/question/question-filter.dto';
 import { QuestionService } from 'src/app/services/question/question.service';
 
 @Component({
@@ -31,10 +31,28 @@ export class QuestionDetailComponent implements OnInit {
   questionResponse: Item|null = null;
   relatedQuestionResponse: Item[] | null = null;
   answerResponse: AnswerItem[] | null = null;
+
+  answerFilter = new QuestionPageFilter();
+  answerTypes = [
+    {
+      title: 'Activity',
+      key: 'activity'
+    },
+    {
+      title: 'Creation',
+      key: 'creation'
+    },
+    {
+      title: 'Votes',
+      key: 'votes'
+    }
+  ]
   constructor( private route: ActivatedRoute, private questionService: QuestionService,
     private router: Router ) { }
 
   ngOnInit() {
+    this.answerFilter.sort = 'votes';
+    this.answerFilter.order = 'desc';
     this.route.paramMap.pipe(
       switchMap(params => {
         this.loader = true;
@@ -42,7 +60,7 @@ export class QuestionDetailComponent implements OnInit {
         return forkJoin([
           this.questionService.getById(this.questionId), 
           this.questionService.getRelatedQuestionsById(this.questionId),
-          this.questionService.getAnswersByQuestionId(this.questionId)
+          this.questionService.getAnswersByQuestionId(this.questionId, this.answerFilter)
         ]);
       })
     ).subscribe(res => {
@@ -53,5 +71,14 @@ export class QuestionDetailComponent implements OnInit {
     });
     // this.questionId = this.route.snapshot.paramMap.get('questionId');
   }
+
+
+  filterAnswers() {
+    this.questionService.getAnswersByQuestionId(this.questionId, this.answerFilter).subscribe(res => {
+      this.answerResponse = res && res.items.length ? res.items : null;
+    })
+  }
+
+  
 
 }

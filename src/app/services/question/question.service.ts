@@ -23,8 +23,8 @@ export class QuestionService {
       // /2.3/questions?page=1&pagesize=20&order=asc&sort=hot&site=stackoverflow
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `?page=${data.page}&pageSize=${data.pageSize}`;
-      baseUrl += `&sort=${data.sort}&order=${data.order}`;
-      return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow').pipe(catchError(this.handleError));
+      baseUrl += `&order=${data.order}&sort=${data.sort}`;
+      return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
 
     searchQuestions(data:QuestionPageFilter): Observable<QuestionResponse> {
@@ -33,23 +33,31 @@ export class QuestionService {
       baseUrl += `?page=${data.page}&pageSize=${data.pageSize}`;
       baseUrl += `&intitle=${data.intitle}`;
       
-      return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow').pipe(catchError(this.handleError));
+      return this.httpClient.get<QuestionResponse>(baseUrl + '&site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
 
     getById(questionId:any): Observable<QuestionResponse> {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}?`
-      return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow').pipe(catchError(this.handleError));
+      return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
     getCommentsByQuestionId(questionId:any): Observable<QuestionResponse> {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}/comments?`
-      return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow').pipe(catchError(this.handleError));
+      return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
-    getAnswersByQuestionId(questionId:any): Observable<AnswerResponse> {
+    getAnswersByQuestionId(questionId:any, data:QuestionPageFilter): Observable<AnswerResponse> {
+      let baseUrl = environment.baseURL + 'questions';
+      baseUrl += `/${questionId}/answers?`;
+      baseUrl += `order=${data.order}&sort=${data.sort}`;
+      // baseUrl += `?page=${data.page}&pageSize=${data.pageSize}`;
+      return this.httpClient.get<AnswerResponse>(baseUrl + '&site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
+    }
+
+    getFilteredAnswersByQuestionId(questionId:any, data:QuestionPageFilter): Observable<AnswerResponse> {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}/answers?`
-      return this.httpClient.get<AnswerResponse>(baseUrl + 'site=stackoverflow').pipe(catchError(this.handleError));
+      return this.httpClient.get<AnswerResponse>(baseUrl + 'site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
 
     getRelatedQuestionsById(questionId:any): Observable<QuestionResponse> {

@@ -1,77 +1,62 @@
 
-<div class="row col-md-10 pt-2">
+<div class="row col-md-10 pt-2" >
 
+ 
+
+ 
+
+  <div class="d-flex justify-content-between">
+    <h3 class="mt-1">All Questions</h3>
+    <div class="btn-group" role="group" aria-label="Basic example">
+
+      <ng-container *ngFor="let btnType of questionTypes">
+        <button type="button" class="btn " [ngClass]="{'btn-outline-primary': pageFilter.sort!=btnType.key,'btn-primary': pageFilter.sort==btnType.key}"
+          (click)="pageFilter.sort=btnType.key; pageFilter.order=pageFilter.order=='desc'? 'asc': 'desc'; filter()">
+          <i *ngIf="pageFilter.sort==btnType.key" class="bi " [ngClass]="{'bi-arrow-up': pageFilter.order=='asc', 'bi-arrow-down': pageFilter.order=='desc'}"></i>
+          {{btnType.title}}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{errorMessage}}
+  </div>
   <div class="d-flex justify-content-center" *ngIf="loader">
     <div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 
-  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-    {{errorMessage}}
-  </div>
-
-  <div class="d-flex justify-content-between">
-    <h3 class="mt-1">All Questions</h3>
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" class="btn" [ngClass]="{
-        'btn-outline-primary': pageFilter.sort!='hot',
-        'btn-primary': pageFilter.sort=='hot'
-      }"
-        (click)="pageFilter.sort='hot'; filter()"
-      >Hot</button>
-      <button type="button" class="btn" [ngClass]="{
-        'btn-outline-primary': pageFilter.sort!='week',
-        'btn-primary': pageFilter.sort=='week'
-      }"
-        (click)="pageFilter.sort='week'; filter()">Week</button>
-      <button type="button" class="btn" [ngClass]="{
-        'btn-outline-primary': pageFilter.sort!='month',
-        'btn-primary': pageFilter.sort=='month'
-      }"
-        (click)="pageFilter.sort='month'; filter()">Month</button>
-      <button type="button" class="btn" 
-      [ngClass]="{
-        'btn-outline-primary': pageFilter.sort!='creation',
-        'btn-primary': pageFilter.sort=='creation'
-      }"
-        (click)="pageFilter.sort='creation'; filter()">Creation</button>
-      <button type="button" class="btn" 
-      [ngClass]="{
-        'btn-outline-primary': pageFilter.sort!='votes',
-        'btn-primary': pageFilter.sort=='votes'
-      }"
-        (click)="pageFilter.sort='votes'; filter()">Votes</button>
-    </div>
-  </div>
-
   <ng-container *ngFor="let question of questionResponse?.items">
-    <div class="d-flex mt-4"  @fade>
-      <div class="d-flex flex-column p-2">
-        <div class="">{{question.score}}</div>
-        <div class="text-muted">votes</div>
-        <div class="">{{question.answer_count}}</div>
-        <div class="text-muted">answer</div>
-        <div class="">{{question.view_count}}</div>
-        <div class="text-muted">views</div>
+    <div class="d-flex mt-4" @pageAnimations>
+      <div id="votes" class="d-flex flex-column p-2">
+        <div class="fs-6">{{question.score}}</div>
+        <div class="text-muted fs-6">votes</div>
+        <div class="fs-6">{{question.answer_count}}</div>
+        <div class="text-muted fs-6">answer</div>
+        <div class="fs-6">{{question.view_count}}</div>
+        <div class="text-muted fs-6">views</div>
       </div>
-      <div class="flex-fill d-flex flex-column p-2">
+      <div id="question" class="flex-fill d-flex flex-column p-2">
         <h4>
-          <a style="text-decoration: none;" [routerLink]="['./' + question.question_id]" routerLinkActive="active" >
+          <a style="text-decoration: none;"  class="fs-4"
+          [routerLink]="['./' + question.question_id]" routerLinkActive="active" >
             {{question.title}}
           </a>
         </h4>
-        <div>Desc</div>
-        <div class="d-flex justify-content-between">
+        <div [innerHTML]="question.body" class="text-muted col-md-10" style="overflow: hidden;max-height: 4rem; width: 55rem; text-overflow: ellipsis;"></div>
+        <!-- <div>Desc</div> -->
+        <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex flex-wrap">
             <h5 *ngFor="let tag of question.tags" class="pe-1">
-              <span class="badge bg-secondary">{{tag}}</span>
+              <span role="button" class="badge bg-secondary pointer"
+              [routerLink]="['./']" [queryParams]="{searchText: tag}" routerLinkActive="active" >{{tag}}</span>
             </h5>
           </div>
           <div class="d-flex flex-column col-md-2">
             <div class="text-muted">{{question.creation_date | date: 'dd/MM/yyyy'}}</div>
             <div class="d-flex">
-              <img src="{{question.owner.profile_image}}" width="40px"/>
+              <img class="rounded-3" src="{{question.owner.profile_image}}" width="50%" height="50%"/>
               <div class="d-flex flex-column">
                 <div class="text-primary"> {{question.owner.display_name}}</div>
                 <div class="d-flex ps-1">{{question.owner.reputation}}</div>

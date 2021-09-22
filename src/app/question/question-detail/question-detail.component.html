@@ -8,31 +8,62 @@
     <div class="col-lg-9" @translate>
       <div class="d-flex flex-column">
         <h2>{{questionResponse.title}}</h2>
-        <div class="d-flex justify-content-between col-md-5">
-          <div>Asked : {{questionResponse.creation_date| date:'dd/MM/yyyy'}}</div>
-          <div>Active: {{questionResponse.is_answered}}</div>
-          <div>Viewed: {{questionResponse.view_count}}</div>
+        <div class="d-flex justify-content-between col-md-7">
+          <div><span class="text-muted">Asked</span> : {{questionResponse.creation_date| date:'dd/MM/yyyy'}}</div>
+          <div><span class="text-muted">Active</span> : {{questionResponse.is_answered ? 'today' : 'Old'}}</div>
+          <div><span class="text-muted">Viewed</span> : {{questionResponse.view_count}} times</div>
         </div>
+        <hr />
+        <div [innerHTML]="questionResponse.body"></div>
+       
       </div>
 
-      <h4 class="text-muted">List of Answers</h4>
+      <hr />
+      <div class="d-flex justify-content-between py-4">
+        <h4 class="text-muted fs-3">{{questionResponse.answer_count}} Answers</h4>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <ng-container *ngFor="let btnType of answerTypes">
+            <button type="button" class="btn " [ngClass]="{'btn-outline-primary': answerFilter.sort!=btnType.key,'btn-primary': answerFilter.sort==btnType.key}"
+              (click)="answerFilter.sort=btnType.key; answerFilter.order=answerFilter.order=='desc'? 'asc': 'desc'; filterAnswers()">
+              <i *ngIf="answerFilter.sort==btnType.key" class="bi " [ngClass]="{'bi-arrow-up': answerFilter.order=='asc', 'bi-arrow-down': answerFilter.order=='desc'}"></i>
+              {{btnType.title}}
+            </button>
+          </ng-container>
+        </div>
+      </div>
+      
       <ng-template [ngIf]="answerResponse">
 
         <ng-container *ngFor="let answer of answerResponse">
           <div class="d-flex flex-column">
             <div class="d-flex">
-              <img [src]="answer.owner.profile_image" width="40px" class="rounded-circle" />
-              <h4 class="p-2">{{answer.owner.display_name}}</h4>
+
+              <div class="d-none d-md-block d-flex flex-column px-4 text-center">
+                <i class="bi bi-caret-up-fill"></i>
+                <div>{{answer.score}}</div>
+                <i class="bi bi-caret-down-fill"></i>
+              </div>
+              <div [innerHTML]="answer.body"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="col-md-8">
+                
+              </div>
+              <div class="col-md-4 d-flex">
+                <img  [src]="answer.owner.profile_image" width="20%" class="rounded-3" />
+                <h4 class="p-2">{{answer.owner.display_name}}</h4>
+              </div>
             </div>
             
             <!-- <h2>{{answer.}}</h2> -->
-            <div class="d-flex justify-content-between col-md-5">
+            <!-- <div class="d-flex justify-content-between col-md-5">
               <div>Answer Id : {{answer.answer_id}}</div>
               <div>Score: {{answer.score}}</div>
               <div>Is Accepted: {{answer.is_accepted}}</div>
-            </div>
+            </div> -->
           </div>
 
+          <hr />
         </ng-container> 
 
       </ng-template>
