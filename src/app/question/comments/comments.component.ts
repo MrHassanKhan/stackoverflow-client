@@ -13,6 +13,7 @@ export class CommentsComponent implements OnInit, OnChanges {
   @Input() questionId: any = null;
 
   loader = false;
+  errorMessage = null;
 
   comments:any = [];
 
@@ -35,6 +36,11 @@ export class CommentsComponent implements OnInit, OnChanges {
     this.questionService.getCommentsByAnswerId(answerId).subscribe(res => {
       this.comments = res && res.items.length ? res.items : null;
       this.loader = false;
+    }, err => {
+      this.errorMessage = err;
+      setTimeout(() => {
+        this.errorMessage = null;
+      }, 4000);
     });
   }
 
@@ -42,6 +48,11 @@ export class CommentsComponent implements OnInit, OnChanges {
     this.questionService.getCommentsByQuestionId(questionId).subscribe(res => {
       this.comments = res && res.items.length ? res.items : null;
       this.loader = false;
+    }, err => {
+      this.errorMessage = err;
+      setTimeout(() => {
+        this.errorMessage = null;
+      }, 4000);
     });
   }
 
