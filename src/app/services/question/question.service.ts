@@ -46,6 +46,11 @@ export class QuestionService {
       baseUrl += `/${questionId}/comments?`
       return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
     }
+    getCommentsByAnswerId(commentId:any): Observable<QuestionResponse> {
+      let baseUrl = environment.baseURL + 'answers';
+      baseUrl += `/${commentId}/comments?`
+      return this.httpClient.get<QuestionResponse>(baseUrl + 'site=stackoverflow&filter=withbody').pipe(catchError(this.handleError));
+    }
     getAnswersByQuestionId(questionId:any, data:QuestionPageFilter): Observable<AnswerResponse> {
       let baseUrl = environment.baseURL + 'questions';
       baseUrl += `/${questionId}/answers?`;

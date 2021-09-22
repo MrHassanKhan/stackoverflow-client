@@ -14,7 +14,18 @@
           <div><span class="text-muted">Viewed</span> : {{questionResponse.view_count}} times</div>
         </div>
         <hr />
-        <div [innerHTML]="questionResponse.body"></div>
+        <div class="d-flex">
+          <div class="d-none d-md-block d-flex flex-column px-4 text-center">
+            <i class="bi bi-caret-up-fill"></i>
+            <div>{{questionResponse.score}}</div>
+            <i class="bi bi-caret-down-fill"></i>
+          </div>
+          <div [innerHTML]="questionResponse.body"></div>
+        </div>
+        <div>
+          <app-comments [questionId]="questionId"></app-comments>
+        </div>
+        <!-- <div [innerHTML]="questionResponse.body"></div> -->
        
       </div>
 
@@ -24,7 +35,7 @@
         <div class="btn-group" role="group" aria-label="Basic example">
           <ng-container *ngFor="let btnType of answerTypes">
             <button type="button" class="btn " [ngClass]="{'btn-outline-primary': answerFilter.sort!=btnType.key,'btn-primary': answerFilter.sort==btnType.key}"
-              (click)="answerFilter.sort=btnType.key; answerFilter.order=answerFilter.order=='desc'? 'asc': 'desc'; filterAnswers()">
+              (click)="answerFilter.order=answerFilter.order=='desc'? 'asc': 'desc'; answerFilter.sort=btnType.key; filterAnswers()">
               <i *ngIf="answerFilter.sort==btnType.key" class="bi " [ngClass]="{'bi-arrow-up': answerFilter.order=='asc', 'bi-arrow-down': answerFilter.order=='desc'}"></i>
               {{btnType.title}}
             </button>
@@ -43,15 +54,21 @@
                 <div>{{answer.score}}</div>
                 <i class="bi bi-caret-down-fill"></i>
               </div>
-              <div [innerHTML]="answer.body"></div>
+              <div class="d-flex flex-column col-lg-11 col-md-11" [innerHTML]="answer.body"></div>
             </div>
             <div class="d-flex justify-content-between">
-              <div class="col-md-8">
-                
-              </div>
+              <div role="button" (click)="selectedAnswerId = selectedAnswerId==answer.answer_id? null : answer.answer_id;">
+                {{selectedAnswerId==answer.answer_id? 'Hide Comments' : 'Show Comments'}}
+                </div>
               <div class="col-md-4 d-flex">
                 <img  [src]="answer.owner.profile_image" width="20%" class="rounded-3" />
                 <h4 class="p-2">{{answer.owner.display_name}}</h4>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center" *ngIf="selectedAnswerId==answer.answer_id">
+              
+              <div class="col-md-10 px-5">
+                <app-comments [answerId]="answer.answer_id"></app-comments>
               </div>
             </div>
             

@@ -1,3 +1,17 @@
-<p>
-  comments works!
-</p>
+
+<div class="d-flex justify-content-center" *ngIf="loader">
+  <div class="spinner-grow" style="width: 1rem; height: 1rem;" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div class="d-flex flex-column" *ngFor="let comment of comments; let i=index; last as last; first as first;">
+  <hr *ngIf="i==0">
+  <div class="d-flex align-items-start">
+    <div class="flex-fill" [innerHTML]="comment.body"></div>
+    <div class="d-flex col-md-3 justify-content-end">
+      <span class="d-flex p-2 bg-info text-white">@{{comment.owner?.display_name}}</span>
+    </div>
+  </div>
+  
+  <hr *ngIf="!last">
+</div>

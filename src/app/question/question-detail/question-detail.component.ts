@@ -28,6 +28,7 @@ import { QuestionService } from 'src/app/services/question/question.service';
 export class QuestionDetailComponent implements OnInit {
   questionId: number | null = null;
   loader = true;
+  selectedAnswerId: number|null = null;
   questionResponse: Item|null = null;
   relatedQuestionResponse: Item[] | null = null;
   answerResponse: AnswerItem[] | null = null;

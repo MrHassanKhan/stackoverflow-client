@@ -5,6 +5,7 @@ import { QuestionRoutingModule } from './question-routing.module';
 import { SharedModule } from '../shared/share.module';
 import { QuestionService } from '../services/question/question.service';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
     SharedModule,
     QuestionRoutingModule
   ],
-  declarations: [QuestionListComponent, QuestionDetailComponent],
+  declarations: [QuestionListComponent, QuestionDetailComponent, CommentsComponent],
   providers: [QuestionService]
 })
 export class QuestionModule { }

@@ -11,7 +11,7 @@
 
       <ng-container *ngFor="let btnType of questionTypes">
         <button type="button" class="btn " [ngClass]="{'btn-outline-primary': pageFilter.sort!=btnType.key,'btn-primary': pageFilter.sort==btnType.key}"
-          (click)="pageFilter.sort=btnType.key; pageFilter.order=pageFilter.order=='desc'? 'asc': 'desc'; filter()">
+          (click)="pageFilter.order=pageFilter.order=='desc'? 'asc': 'desc'; pageFilter.sort=btnType.key; filter()">
           <i *ngIf="pageFilter.sort==btnType.key" class="bi " [ngClass]="{'bi-arrow-up': pageFilter.order=='asc', 'bi-arrow-down': pageFilter.order=='desc'}"></i>
           {{btnType.title}}
         </button>
